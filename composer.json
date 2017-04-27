@@ -1,7 +1,6 @@
 {
   "name": "wonewer/logger-for-sf",
   "description": "logger for shein framework",
-  "type": "library",
   "source": {
     "url": "https://github.com/wonewer/loggerForSF.git",
     "type": "git",
