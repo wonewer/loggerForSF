@@ -19,6 +19,7 @@ class Logger implements LoggerInterface
     private $recorder;
     private $app;
     private $request;
+    private $serverName;
 
     const INFO   = 'INFO';
     const NOTICE = 'NOTICE';
@@ -29,9 +30,10 @@ class Logger implements LoggerInterface
     const FILE_RECORDER = 'file';
     const REDIS_RECORDER = 'redis';
 
-    public function __construct(Redis $client)
+    public function __construct(Redis $client,$serverName)
     {
         $this->client = $client;
+        $this->serverName = $serverName;
     }
 
     public function setPath($path)
@@ -148,14 +150,12 @@ class Logger implements LoggerInterface
     }
 
     private function setLogBody($className, $title, $message, $level){
-        $serviceInfo = $this->app->getServiceInfo();
-        $h = $this->request->getHeaders();
-        $spanName = $h->get('X-Span-Name', '');
-        $span = $h->get('X-B3-SpanId', '');
-        $parent = $h->get('X-B3-ParentSpanId', '');
-        $trace = $h->get('X-B3-TraceId', '');
+        $spanName = '';
+        $span = '';
+        $parent = '';
+        $trace = '';
         return [
-            'service' => $serviceInfo['name'],
+            'service' => $this->serverName,
             'timestamp' => date('Y-m-d\TH:i:s\.000O'),
             'level' => $level,
             'thread' => 'main',
